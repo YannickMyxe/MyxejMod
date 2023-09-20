@@ -1,6 +1,7 @@
 package com.myxej.myxejmod;
 
 import com.mojang.logging.LogUtils;
+import com.myxej.myxejmod.block.BasicBlock;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.food.FoodProperties;
@@ -53,13 +54,21 @@ public class MyxejMod
     public static final RegistryObject<Item> EXAMPLE_ITEM = ITEMS.register("example_item", () -> new Item(new Item.Properties().food(new FoodProperties.Builder()
             .alwaysEat().nutrition(1).saturationMod(2f).build())));
 
+
+    public static final RegistryObject<BasicBlock> BASIC_BLOCK = BLOCKS.register("basic_block", BasicBlock::new);
+    public static final RegistryObject<Item> BASIC_BLOCK_ITEM = ITEMS.register("basic_block", () -> new BlockItem(BASIC_BLOCK.get(), new Item.Properties()));
+
     // Creates a creative tab with the id "examplemod:example_tab" for the example item, that is placed after the combat tab
     public static final RegistryObject<CreativeModeTab> EXAMPLE_TAB = CREATIVE_MODE_TABS.register("example_tab", () -> CreativeModeTab.builder()
-            .withTabsBefore(CreativeModeTabs.INVENTORY)
+            .withTabsBefore(CreativeModeTabs.SPAWN_EGGS)
             .icon(() -> EXAMPLE_ITEM.get().getDefaultInstance())
             .displayItems((parameters, output) -> {
                 output.accept(EXAMPLE_ITEM.get()); // Add the example item to the tab. For your own tabs, this method is preferred over the event
+                output.accept(BASIC_BLOCK.get());
             }).build());
+
+
+
 
     public MyxejMod()
     {
